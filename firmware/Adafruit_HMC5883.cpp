@@ -13,22 +13,9 @@
   Written by Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
-#if ARDUINO >= 100
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
-
-#ifdef __AVR_ATtiny85__
-  #include "TinyWireM.h"
-  #define Wire TinyWireM
-#else
-  #include <Wire.h>
-#endif
+#include "Adafruit_HMC5883.h"
 
 #include <limits.h>
-
-#include "Adafruit_HMC5883_U.h"
 
 static float _hmc5883_Gauss_LSB_XY = 1100.0F;  // Varies with gain
 static float _hmc5883_Gauss_LSB_Z  = 980.0F;   // Varies with gain
@@ -48,7 +35,7 @@ static float _hmc5883_Gauss_LSB_Z  = 980.0F;   // Varies with gain
 void Adafruit_HMC5883_Unified::write8(byte address, byte reg, byte value)
 {
   Wire.beginTransmission(address);
-  #if ARDUINO >= 100
+  #if ARDUINO >= 100 || defined(PARTICLE)
     Wire.write((uint8_t)reg);
     Wire.write((uint8_t)value);
   #else
@@ -68,14 +55,14 @@ byte Adafruit_HMC5883_Unified::read8(byte address, byte reg)
   byte value;
 
   Wire.beginTransmission(address);
-  #if ARDUINO >= 100
+  #if ARDUINO >= 100 || defined(PARTICLE)
     Wire.write((uint8_t)reg);
   #else
     Wire.send(reg);
   #endif
   Wire.endTransmission();
   Wire.requestFrom(address, (byte)1);
-  #if ARDUINO >= 100
+  #if ARDUINO >= 100 || defined(PARTICLE)
     value = Wire.read();
   #else
     value = Wire.receive();
@@ -94,7 +81,7 @@ void Adafruit_HMC5883_Unified::read()
 {
   // Read the magnetometer
   Wire.beginTransmission((byte)HMC5883_ADDRESS_MAG);
-  #if ARDUINO >= 100
+  #if ARDUINO >= 100 || defined(PARTICLE)
     Wire.write(HMC5883_REGISTER_MAG_OUT_X_H_M);
   #else
     Wire.send(HMC5883_REGISTER_MAG_OUT_X_H_M);
@@ -106,7 +93,7 @@ void Adafruit_HMC5883_Unified::read()
   while (Wire.available() < 6);
 
   // Note high before low (different than accel)  
-  #if ARDUINO >= 100
+  #if ARDUINO >= 100 || defined(PARTICLE)
     uint8_t xhi = Wire.read();
     uint8_t xlo = Wire.read();
     uint8_t zhi = Wire.read();

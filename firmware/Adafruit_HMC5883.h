@@ -16,21 +16,28 @@
 #ifndef __HMC5883_H__
 #define __HMC5883_H__
 
-#if (ARDUINO >= 100)
- #include "Arduino.h"
+#ifdef PARTICLE
+  #include "application.h"
+#elif ARDUINO >= 100
+  #include "Arduino.h"
 #else
- #include "WProgram.h"
+  #include "WProgram.h"
 #endif
 
+#ifdef PARTICLE
+#include "Adafruit_Sensor/Adafruit_Sensor.h"
+#else
 #include <Adafruit_Sensor.h>
-
-#ifdef __AVR_ATtiny85__
-  #include "TinyWireM.h"
-  #define Wire TinyWireM
-#else
-  #include <Wire.h>
 #endif
 
+#ifndef PARTICLE
+  #ifdef __AVR_ATtiny85__
+    #include "TinyWireM.h"
+    #define Wire TinyWireM
+  #else
+    #include <Wire.h>
+  #endif
+#endif
 
 /*=========================================================================
     I2C ADDRESS/BITS
