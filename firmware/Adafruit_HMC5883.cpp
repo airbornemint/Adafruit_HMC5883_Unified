@@ -16,7 +16,6 @@
 #include "Adafruit_HMC5883.h"
 
 #include <limits.h>
-#include <math.h>
 
 static float _hmc5883_Gauss_LSB_XY = 1100.0F;  // Varies with gain
 static float _hmc5883_Gauss_LSB_Z  = 980.0F;   // Varies with gain
