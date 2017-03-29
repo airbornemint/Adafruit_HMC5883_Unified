@@ -16,8 +16,10 @@
 #ifndef __HMC5883_H__
 #define __HMC5883_H__
 
-#if (ARDUINO >= 100)
- #include "Arduino.h"
+#ifdef PARTICLE
+  #include "application.h"
+#elif ARDUINO >= 100
+  #include "Arduino.h"
 #else
  #include "WProgram.h"
 #endif
